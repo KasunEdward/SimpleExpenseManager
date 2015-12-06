@@ -24,14 +24,13 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import lk.ac.mrt.cse.dbs.simpleexpensemanager.R;
+import lk.ac.mrt.cse.dbs.simpleexpensemanager.control.ExpenseManager;
+import lk.ac.mrt.cse.dbs.simpleexpensemanager.data.model.Transaction;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import lk.ac.mrt.cse.dbs.simpleexpensemanager.R;
-import lk.ac.mrt.cse.dbs.simpleexpensemanager.control.ExpenseManager;
-import lk.ac.mrt.cse.dbs.simpleexpensemanager.data.model.Transaction;
 
 import static lk.ac.mrt.cse.dbs.simpleexpensemanager.Constants.EXPENSE_MANAGER;
 /**
@@ -52,7 +51,7 @@ public class ExpenseLogsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)  {
         View rootView = inflater.inflate(R.layout.fragment_expense_logs, container, false);
         TableLayout logsTableLayout = (TableLayout) rootView.findViewById(R.id.logs_table);
         TableRow tableRowHeader = (TableRow) rootView.findViewById(R.id.logs_table_header);
@@ -62,12 +61,16 @@ public class ExpenseLogsFragment extends Fragment {
         if (currentExpenseManager != null) {
             transactionList = currentExpenseManager.getTransactionLogs();
         }
-        generateTransactionsTable(rootView, logsTableLayout, transactionList);
+        try {
+            generateTransactionsTable(rootView, logsTableLayout, transactionList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return rootView;
     }
 
     private void generateTransactionsTable(View rootView, TableLayout logsTableLayout,
-                                           List<Transaction> transactionList) {
+                                           List<Transaction> transactionList) throws Exception {
         for (Transaction transaction : transactionList) {
             TableRow tr = new TableRow(rootView.getContext());
             TextView lDateVal = new TextView(rootView.getContext());

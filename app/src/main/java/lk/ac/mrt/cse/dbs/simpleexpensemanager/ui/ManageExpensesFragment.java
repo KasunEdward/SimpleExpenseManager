@@ -71,8 +71,12 @@ public class ManageExpensesFragment extends Fragment implements View.OnClickList
         ArrayAdapter<String> adapter =
                 null;
         if (currentExpenseManager != null) {
-            adapter = new ArrayAdapter<>(this.getActivity(), R.layout.support_simple_spinner_dropdown_item,
-                    currentExpenseManager.getAccountNumbersList());
+            try {
+                adapter = new ArrayAdapter<>(this.getActivity(), R.layout.support_simple_spinner_dropdown_item,
+                        currentExpenseManager.getAccountNumbersList());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         accountSelector.setAdapter(adapter);
 
@@ -82,7 +86,33 @@ public class ManageExpensesFragment extends Fragment implements View.OnClickList
         datePicker = (DatePicker) rootView.findViewById(R.id.date_selector);
         return rootView;
     }
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            setSpinnerAdapter();
+        } else {
+        }
+    }
 
+    /**
+     * Update account number spinner when fragment is resumed
+     */
+    private void setSpinnerAdapter() {
+        ArrayAdapter<String> adapter =
+                null;
+        if (currentExpenseManager != null) {
+            try {
+                adapter = new ArrayAdapter<>(this.getActivity(), R.layout.support_simple_spinner_dropdown_item,
+                        currentExpenseManager.getAccountNumbersList());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (accountSelector != null) {
+            accountSelector.setAdapter(adapter);
+        }
+    }
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
